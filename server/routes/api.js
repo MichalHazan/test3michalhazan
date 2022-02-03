@@ -38,24 +38,7 @@ router.get('/servers', async (req, res) => {
 
     }
 })
-// --by id
-router.get('/servers/:id', async (req, res) => {
-    try {
-        const servers = await SQL(`
-        SELECT servers.*, companies.companyName as company
-        FROM servers
-        inner join companies on servers.company_id = companies.companyID
-        where servers.id = ${req.params.id};
-        `)
-        console.table(servers) //showing nice table at the terminal
-        res.send(servers)
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(500)
-
-    }
-})
-
+// ----שרתים מופעלים בלבד
 router.get('/onlyon', async (req, res) => {
     try {
         const onlyon = await SQL(`
@@ -65,7 +48,7 @@ router.get('/onlyon', async (req, res) => {
         WHERE servers.status = 1
         order by created desc;
         `)
-        console.table(onlyon) //showing nice table at the terminal
+        console.table(onlyon)
         res.send(onlyon)
     } catch (error) {
         console.log(error);
@@ -73,6 +56,24 @@ router.get('/onlyon', async (req, res) => {
 
     }
 })
+// ---UPDATE : Change Status-----
+router.put('/onoff/:server_id', async (req, res) => {
+    try {
+        await SQL(`
+        update servers
+        set status = ${req.body.ison}
+        where id= ${req.params.server_id}
+        ;
+        `)
+
+        res.send({ msg: "on/off" })
+
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500)
+    }
+})
+// --Add server
 router.post('/servers', async (req, res) => {
     try {
         const { serverName, ip, company_id } = req.body
@@ -88,21 +89,21 @@ router.post('/servers', async (req, res) => {
         res.sendStatus(500)
     }
 })
-
-router.put('/onoff/:server_id', async (req, res) => {
+// --Get by id
+router.get('/servers/:id', async (req, res) => {
     try {
-        await SQL(`
-         update servers
-         set status = ${req.body.ison}
-         where id= ${req.params.server_id}
-         ;
-         `)
-
-        res.send({ msg: "on/off" })
-
+        const servers = await SQL(`
+        SELECT servers.*, companies.companyName as company
+        FROM servers
+        inner join companies on servers.company_id = companies.companyID
+        where servers.id = ${req.params.id};
+        `)
+        console.table(servers) //showing nice table at the terminal
+        res.send(servers)
     } catch (error) {
         console.log(error);
         res.sendStatus(500)
+
     }
 })
 

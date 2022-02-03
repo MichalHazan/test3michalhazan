@@ -28,7 +28,6 @@ export default function App() {
       anchor="left"
       open={isNavOpen}
       onClose={() => setisNavOpen(false)}
-    // onClose={toggleDrawer(anchor, false)}
     >
       <List>
         <ListItem disablePadding>

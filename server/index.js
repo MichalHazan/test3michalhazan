@@ -1,10 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const { SQL } = require('./dbconfig')
-
 
 // --inits
-
 const app = express()
 const corsOptions = {
     origin: "http://localhost:3000",
@@ -15,13 +12,12 @@ const corsOptions = {
 app.use(express.json())
 app.use(cors(corsOptions))
 
-
 // endpoints
 app.get('/', (req, res) => {
-    res.send({ msg: "work", docsUrl: "http://localhost:2001/servers" })
+    res.send({ msg: "work", docsUrl: "http://localhost:2001/api/servers" })
 })
 
-
+// --routes
 app.use('/companies', require('./routes/companies'))
 app.use('/api', require('./routes/api'))
 // --listen
